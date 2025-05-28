@@ -25,7 +25,7 @@ public class Task {
     private LocalDate dueDate;
     private boolean isCompleted;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "user_id")
     private User user;
 
 
