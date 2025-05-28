@@ -1,0 +1,23 @@
+meta {
+  name: findByUserOrderByDueDateAsc
+  type: http
+  seq: 4
+}
+
+post {
+  url: http:localhost:8070/service/tasks/findByUserOrderByDueDateAsc
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "user": {
+      "id":1,
+      "username":"idkman",
+      "email":"idkman@email.com",
+      "user_role":"USER",
+      "user_type":"DEFAULT"
+    }
+  }
+}

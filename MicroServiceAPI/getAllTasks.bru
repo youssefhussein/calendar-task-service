@@ -1,0 +1,11 @@
+meta {
+  name: getAllTasks
+  type: http
+  seq: 1
+}
+
+get {
+  url: http://localhost:8070/service/tasks/all
+  body: none
+  auth: inherit
+}

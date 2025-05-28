@@ -1,0 +1,21 @@
+meta {
+  name: Create Task
+  type: http
+  seq: 2
+}
+
+post {
+  url: http://localhost:8070/service/tasks/store
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+   
+    "taskName": "im so cool and beautiful and yes (02:21)",
+    "taskDescription": "faf",
+    "dueDate": "2025-05-07",
+    "completed": true
+  }
+}
