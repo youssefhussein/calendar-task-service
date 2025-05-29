@@ -4,6 +4,7 @@ import com.calendar.tasks.calendartaskservice.Models.Task;
 import com.calendar.tasks.calendartaskservice.Models.User;
 import com.calendar.tasks.calendartaskservice.Repositories.TaskRepository;
 import com.calendar.tasks.calendartaskservice.Repositories.UserRepository;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,23 +20,25 @@ import static org.springframework.http.HttpStatus.OK;
 public class TaskController {
     private final TaskRepository taskRepository;
     private final UserRepository UserRepository;
+    private final UserRepository userRepository;
     
-    public TaskController(TaskRepository taskRepository, UserRepository UserRepository) {
+    public TaskController(TaskRepository taskRepository, UserRepository UserRepository, UserRepository userRepository) {
         this.taskRepository = taskRepository;
         this.UserRepository = UserRepository;
+        this.userRepository = userRepository;
     }
-    
+  
     @GetMapping("")
     public ResponseEntity<List<Task>> getAllTasks() {
         return ResponseEntity.ok(taskRepository.findAll());
     }
-    
+    // DONE
     @PostMapping("/store")
-    public ResponseEntity<Task> storeTask(@RequestBody Task newTask) {
-        Task savedTask =  taskRepository.save(newTask);
-         return new ResponseEntity<>(savedTask, HttpStatus.CREATED);
+    public Task storeTask(@RequestBody @Valid Task task , @RequestParam Integer userId) {
+        task.setUser(UserRepository.findById(userId).orElseThrow());
+        return taskRepository.save(task);
     }
-    @GetMapping("/findByUserAndDueDateBetween?")
+    @GetMapping("/findByUserAndDueDateBetween")
     public ResponseEntity<List<Task>> findByUserAndDueDateBetween(
             @RequestParam Integer userId,
             @RequestParam LocalDate startDate,
@@ -45,31 +48,13 @@ public class TaskController {
         List<Task> foundTasks = taskRepository.findByUserAndDueDateBetween(user, startDate, endDate);
     return new ResponseEntity<>(foundTasks , OK);
     }
-    @PostMapping("/findByUserOrderByDueDateAsc")
-    public ResponseEntity findByUserOrderByDueDateAsc(@RequestBody Map<String,User> body) {
-    User incomingUser = body.get("user");
-        List<Task> foundTasks = taskRepository.findByUserOrderByDueDateAsc(incomingUser);
+    @GetMapping("/findByUserOrderByDueDateAsc")
+    public ResponseEntity<List<Task>> findByUserOrderByDueDateAsc(@RequestParam Integer userId) {
+    User incomingUser = userRepository.findById(userId).orElseThrow();
+    List<Task> foundTasks = taskRepository.findByUserOrderByDueDateAsc(incomingUser);
     return new ResponseEntity<>(foundTasks , OK);
     }
     
-    /* from lab
-    *  @PostMapping("Registration")
-    public ResponseEntity createPost(@RequestBody Map<String,String> body){
-        User myUser = new User();
-        myUser.setName(body.get("name"));
-        myUser.setUsername(body.get("username"));
-        myUser.setPassword(body.get("password"));
-        myUser.setDob(body.get("dob"));
-        this.userRepositry.save(myUser);
-        return new ResponseEntity(myUser, HttpStatus.CREATED);
-    }
-    *
-    *  @GetMapping("")
-    public ResponseEntity getUsers(){
-        List<User> users= this.userRepositry.findAll();
-        return new ResponseEntity(users, HttpStatus.OK);
-    }
-    * */
     
     
 }
