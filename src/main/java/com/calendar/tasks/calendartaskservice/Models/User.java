@@ -1,8 +1,10 @@
 package com.calendar.tasks.calendartaskservice.Models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -24,6 +26,7 @@ public class User {
     private String userRole; // USER,ADMIN
     @Column(nullable = true)
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Task> tasks;
+    @JsonManagedReference
+    private List<Task> tasks = new ArrayList<>();
     
 }
