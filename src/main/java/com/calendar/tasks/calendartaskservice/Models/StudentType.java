@@ -1,7 +1,6 @@
 package com.calendar.tasks.calendartaskservice.Models;
 
-public enum UserType {
-    DEFAULT,
+public enum StudentType {
     STUDENT,
-    ORGANIZATION,
+    NON_STUDENT
 }

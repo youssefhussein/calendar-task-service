@@ -27,6 +27,18 @@ public class User {
     @Column(nullable = true)
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
-    private List<Task> tasks = new ArrayList<>();
+    private List<Task> tasks;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = true)
+    private StudentType studentType = StudentType.NON_STUDENT;
     
+    @Column(nullable = true)
+    private String studentId;
+    
+    @ManyToOne(optional = true)
+    @JoinColumn(name = "organization_id", nullable = true)
+    private Organization organization;
+    
+    @Column(nullable = true)
+    private Boolean isOrganizationAdmin = false;
 }
